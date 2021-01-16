@@ -1,0 +1,88 @@
+// Massive help from youtuber content creator Ben Brooke Follow like and subscribe to him! : https://www.youtube.com/watch?v=ESSQykjKmuA&ab_channel=BenBrooke -->
+
+
+const data = [
+  { id: 'snare', letter: 'Q', src: 'https://www.myinstants.com/media/sounds/snare.mp3' },
+  { id: 'bass 1', letter: 'W', src: 'https://www.myinstants.com/media/sounds/bass-drum.mp3' },
+  { id: 'bruh', letter: 'E', src: 'https://www.myinstants.com/media/sounds/movie_1.mp3' },
+  { id: 'nutt', letter: 'A', src: 'https://www.myinstants.com/media/sounds/nut_ZKo5FA9.mp3' },
+  { id: 'oof', letter: 'S', src: 'https://www.myinstants.com/media/sounds/roblox-death-sound_1.mp3' },
+  { id: 'mission failed', letter: 'D', src: 'https://www.myinstants.com/media/sounds/mission-failed-well-get-em-next-time.mp3' },
+  { id: 'discord', letter: 'Z', src: 'https://www.myinstants.com/media/sounds/discord-notification.mp3' },
+  { id: 'not like this', letter: 'X', src: 'https://www.myinstants.com/media/sounds/oh-shit-iam-sorry.mp3' },
+  { id: 'laser', letter: 'C', src: 'http://www.sa-matra.net/sounds/starcontrol/Umgah-Backzip.wav'  },
+]
+
+class DrumPad extends React.Component {
+ 
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyDown)
+  }
+  
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown)
+  }
+  
+  handleKeyDown = e => {
+    if(e.keyCode === this.props.letter.charCodeAt()){
+      this.audio.play()
+      this.audio.currentTime =0
+      this.props.handleDisplay(this.props.id)
+    }
+  }
+  
+  handleClick = () => {
+    this.audio.play()
+   this.audio.currentTime = 0
+    
+    this.props.handleDisplay(this.props.id)
+  }
+  
+  render() {
+    return(
+    <div className='drum-pad' 
+      id={this.props.id}
+      onClick={this.handleClick}
+      >
+        <h1>{this.props.letter}</h1>
+        <audio 
+          ref={ref => this.audio = ref} //reference referes to this specific element audio its referenceing from
+          className='clip'
+          src={this.props.src} 
+          id={this.props.letter}></audio>
+    </div>
+    )
+  }
+}
+
+class App extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      display: 'Click or Press key'
+    }
+  }
+  
+  handleDisplay = display => this.setState({ display })
+  
+  render() {
+    return(
+      <div id='drum-machine'>
+        <div id='display'>{this.state.display}</div>
+        <div id='drum-pads'>
+        {data.map(d => (
+                 <DrumPad
+                   id={d.id}
+                   letter={d.letter}
+                   src={d.src}
+                   handleDisplay={this.handleDisplay}
+                  // onClick={this.handleClick}
+                  />
+                 ))}
+      </div>
+          </div>
+    )
+  }
+}
+
+ReactDOM.render(<App /> , document.getElementById("root"));
